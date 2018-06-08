@@ -5,17 +5,14 @@ import { UserSession } from '../models/user-session';
 describe('Session', () => {
   let state: SessionState;
 
-  beforeEach(() => {
-    state = sessionReducer(undefined, { type: 'INIT' } as any);
-  });
-
   it('returns a correct inital state', () => {
+    state = sessionReducer(undefined, { type: 'INIT' } as any);
     expect(state.sessionReceived).toBeFalsy();
     expect(state.userSession).toBeUndefined();
   });
 
   it('sets a correct user login', () => {
-    const userSession: UserSession = {
+    const userSession= {
       login: 'test',
       profileImageUrl: 'test.png',
       authToken: 'test',

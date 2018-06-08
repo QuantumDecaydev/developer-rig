@@ -18,7 +18,11 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
+<<<<<<< HEAD
         <RigNav
+=======
+        <Connect(RigNavComponent)
+>>>>>>> product-management
           bitsEnabled={undefined}
           configHandler={[Function]}
           error=""
@@ -153,7 +157,11 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
+<<<<<<< HEAD
           <RigNav
+=======
+          <Connect(RigNavComponent)
+>>>>>>> product-management
             bitsEnabled={undefined}
             configHandler={[Function]}
             error=""
@@ -310,7 +318,11 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
+<<<<<<< HEAD
         <RigNav
+=======
+        <Connect(RigNavComponent)
+>>>>>>> product-management
           bitsEnabled={undefined}
           configHandler={[Function]}
           error=""
@@ -593,7 +605,11 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
+<<<<<<< HEAD
           <RigNav
+=======
+          <Connect(RigNavComponent)
+>>>>>>> product-management
             bitsEnabled={undefined}
             configHandler={[Function]}
             error=""
