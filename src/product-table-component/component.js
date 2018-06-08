@@ -7,23 +7,23 @@ import './component.sass';
 const PRODUCT_NUM_LIMIT = 250;
 
 export class ProductTableComponent extends Component {
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
 
-    this.state = {
-      products: [{
-        displayName: 'New Product',
-        sku: 'sku1',
-        amount: '1',
-        inDevelopment: 'true',
-        broadcast: 'true',
-        deprecated: false,
-        dirty: true,
-        validationErrors: {}
-      }],
-      error: ''
-    };
-  }
+  //   this.state = {
+  //     products: [{
+  //       displayName: 'New Product',
+  //       sku: 'sku1',
+  //       amount: '1',
+  //       inDevelopment: 'true',
+  //       broadcast: 'true',
+  //       deprecated: false,
+  //       dirty: true,
+  //       validationErrors: {}
+  //     }],
+  //     error: ''
+  //   };
+  // }
 
   componentDidMount() {
     fetchProducts(
@@ -46,7 +46,7 @@ export class ProductTableComponent extends Component {
   }
 
   handleDeprecateClick(index, event) {
-    const deprecated = this.state.products[index].deprecated;
+    const deprecated = this.props.products[index].deprecated;
     const partial = {
       deprecated: !deprecated,
       dirty: true
@@ -73,7 +73,7 @@ export class ProductTableComponent extends Component {
   }
 
   handleSaveProductsClick(event) {
-    const products = this.state.products.map((p, i) => {
+    const products = this.props.products.map((p, i) => {
       if (p.dirty) {
         p.saving = true
         saveProduct(
@@ -93,13 +93,13 @@ export class ProductTableComponent extends Component {
   }
 
   render() {
-    const skus = this.state.products.map(p => p.sku);
-    const disableAddButton = this.state.products.length >= PRODUCT_NUM_LIMIT;
+    const skus = this.props.products.map(p => p.sku);
+    const disableAddButton = this.props.products.length >= PRODUCT_NUM_LIMIT;
     let disableSaveButton = false;
     let liveProducts = [];
     let deprecatedProducts = [];
 
-    this.state.products.forEach((p, i) => {
+    this.props.products.forEach((p, i) => {
       const matchingSkus = skus.filter(sku => sku === p.sku);
       if (matchingSkus.length > 1) {
         p.validationErrors = {

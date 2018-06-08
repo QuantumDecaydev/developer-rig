@@ -2,6 +2,7 @@ import { Action, AsyncAction } from './models/actions';
 import { GlobalState } from './models/global-state';
 import { applyMiddleware, compose, createStore, Reducer, combineReducers, Store as ReduxStore } from 'redux';
 import { sessionReducer } from './state/session';
+import { productsReducer } from './state/products';
 import thunk from 'redux-thunk';
 
 declare const window: Window;
@@ -18,6 +19,7 @@ export class RigStore {
   private initRootReducer(): Reducer {
     return combineReducers({
       session: sessionReducer,
+      products: productsReducer
     });
   }
 
