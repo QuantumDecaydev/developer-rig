@@ -6,7 +6,7 @@ import { ProductTableComponent } from './component';
 function mapStateToProps(state) {
   return {
     products: getProducts(state),
-    token: getUserSession(state).authToken,
+    token: (getUserSession(state) || {}).authToken,
   };
 }
 
