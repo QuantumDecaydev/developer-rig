@@ -7,23 +7,6 @@ import './component.sass';
 const PRODUCT_NUM_LIMIT = 250;
 
 export class ProductTableComponent extends Component {
-  // constructor(props) {
-  //   super(props);
-
-  //   this.state = {
-  //     products: [{
-  //       displayName: 'New Product',
-  //       sku: 'sku1',
-  //       amount: '1',
-  //       inDevelopment: 'true',
-  //       broadcast: 'true',
-  //       deprecated: false,
-  //       dirty: true,
-  //       validationErrors: {}
-  //     }],
-  //     error: ''
-  //   };
-  // }
 
   componentDidMount() {
     fetchProducts(
