@@ -9,50 +9,32 @@ const PRODUCT_NUM_LIMIT = 250;
 export class ProductTableComponent extends Component {
 
   componentDidMount() {
+    const { clientId, token, loadProducts } = this.props;
     fetchProducts(
       'api.twitch.tv',
-      this.props.clientId,
-      this.props.token,
-      this._handleFetchProductsSuccess.bind(this),
+      clientId,
+      token,
+      loadProducts,
       this._handleFetchProductsError.bind(this)
     );
   }
 
   handleValueChange(index, event) {
+    const { changeProductValue } = this.props;
     const value = event.target.value;
     const fieldName = event.target.name;
-    const partial = {
-      [fieldName]: value,
-      dirty: true
-    };
-    this._updateProduct(index, partial);
+    changeProductValue(index, fieldName, value);
   }
 
   handleDeprecateClick(index, event) {
-    const deprecated = this.props.products[index].deprecated;
-    const partial = {
-      deprecated: !deprecated,
-      dirty: true
-    };
-    this._updateProduct(index, partial);
+    const { changeProductValue } = this.props;
+    const value = this.props.products[index].deprecated;
+    changeProductValue(index, 'deprecated', value);
   }
 
-  handleAddProductClick(event) {
-    this.setState(prevState => {
-      const products = [...prevState['products']];
-      const product = {
-        displayName: 'New Product',
-        sku: 'newSKU',
-        amount: '1',
-        inDevelopment: 'true',
-        broadcast: 'true',
-        deprecated: false,
-        dirty: true,
-        validationErrors: {}
-      };
-      products.push(product)
-      return { products: products };
-    });
+  handleAddProductClick() {
+    const { addProduct } = this.props;
+    addProduct();
   }
 
   handleSaveProductsClick(event) {

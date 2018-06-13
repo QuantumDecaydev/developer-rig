@@ -1,8 +1,6 @@
 import { createSignedToken } from '../util/token';
 import { missingConfigurations } from '../util/errors';
 import { RIG_ROLE } from '../constants/rig';
-import { store } from '..';
-import { loadProducts } from '../core/actions/products'
 
 export function convertViews(data) {
   const views = {};
@@ -177,8 +175,7 @@ export function fetchProducts(host, clientId, token, onSuccess, onError) {
 
         return product;
       });
-      store.dispatch(loadProducts(serializedProducts));
-      //onSuccess(serializedProducts);
+      onSuccess(serializedProducts);
     }).catch(error => {
       onError(error);
     });
