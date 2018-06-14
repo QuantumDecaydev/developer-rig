@@ -1,17 +1,28 @@
 import { Action } from '../models/actions';
 import { Product } from '../models/product';
 
-export const LOAD_PRODUCTS = 'core.products.LOAD';
-export const SAVE_PRODUCTS = 'core.products.SAVE';
+export const LOAD_PRODUCTS_SUCCESS = 'core.products.LOAD_SUCCESS';
+export const LOAD_PRODUCTS_FAILURE = 'core.products.LOAD_FAILURE';
+export const SAVE_PRODUCT_SUCCESS = 'core.products.SAVE_SUCCESS';
+export const SAVE_PRODUCT_FAILURE = 'core.products.SAVE_FAILURE';
 export const ADD_PRODUCT = 'core.products.ADD';
 export const CHANGE_PRODUCT = 'core.products.CHANGE';
 
-interface LoadProducts extends Action<typeof LOAD_PRODUCTS> {
+interface LoadProductsSuccess extends Action<typeof LOAD_PRODUCTS_SUCCESS> {
   products: Product[];
 }
 
-interface SaveProducts extends Action<typeof SAVE_PRODUCTS> {
-  products: Product[];
+interface LoadProductsFailure extends Action<typeof LOAD_PRODUCTS_FAILURE> {
+  error: string;
+}
+
+interface SaveProductSuccess extends Action<typeof SAVE_PRODUCT_SUCCESS> {
+  index: number;
+}
+
+interface SaveProductFailure extends Action<typeof SAVE_PRODUCT_FAILURE> {
+  index: number;
+  error: string;
 }
 
 interface AddProduct extends Action<typeof ADD_PRODUCT> {}
@@ -23,23 +34,40 @@ interface ChangeProductValue extends Action<typeof CHANGE_PRODUCT> {
 }
 
 export type All = (
-  | LoadProducts
-  | SaveProducts
+  | LoadProductsSuccess
+  | LoadProductsFailure
+  | SaveProductSuccess
+  | SaveProductFailure
   | AddProduct
   | ChangeProductValue
 );
 
-export function loadProducts(products: Product[] | null): LoadProducts {
+export function loadProductsSuccess(products: Product[]): LoadProductsSuccess {
   return {
-    type: LOAD_PRODUCTS,
+    type: LOAD_PRODUCTS_SUCCESS,
     products: products,
   }
 }
 
-export function saveProducts(products: Product[] | null): SaveProducts {
+export function loadProductsFailure(error: string): LoadProductsFailure {
   return {
-    type: SAVE_PRODUCTS,
-    products: products,
+    type: LOAD_PRODUCTS_FAILURE,
+    error: error,
+  }
+}
+
+export function saveProductSuccess(index: number): SaveProductSuccess {
+  return {
+    type: SAVE_PRODUCT_SUCCESS,
+    index: index,
+  }
+}
+
+export function saveProductFailure(index: number, error: string): SaveProductFailure {
+  return {
+    type: SAVE_PRODUCT_FAILURE,
+    index: index,
+    error: error,
   }
 }
 

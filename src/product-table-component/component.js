@@ -9,13 +9,13 @@ const PRODUCT_NUM_LIMIT = 250;
 export class ProductTableComponent extends Component {
 
   componentDidMount() {
-    const { clientId, token, loadProducts } = this.props;
+    const { clientId, token, loadProductsSuccess, loadProductsFailure } = this.props;
     fetchProducts(
       'api.twitch.tv',
       clientId,
       token,
-      loadProducts,
-      this._handleFetchProductsError.bind(this)
+      loadProductsSuccess,
+      loadProductsFailure,
     );
   }
 
@@ -26,10 +26,10 @@ export class ProductTableComponent extends Component {
     changeProductValue(index, fieldName, value);
   }
 
-  handleDeprecateClick(index, event) {
+  handleDeprecateClick(index) {
     const { changeProductValue } = this.props;
-    const value = this.props.products[index].deprecated;
-    changeProductValue(index, 'deprecated', value);
+    const deprecated = this.props.products[index].deprecated;
+    changeProductValue(index, 'deprecated', !deprecated);
   }
 
   handleAddProductClick() {
@@ -37,23 +37,20 @@ export class ProductTableComponent extends Component {
     addProduct();
   }
 
-  handleSaveProductsClick(event) {
-    const products = this.props.products.map((p, i) => {
-      if (p.dirty) {
-        p.saving = true
+  handleSaveProductsClick() {
+    const { clientId, token, saveProductsSuccess, saveProductsFailure } = this.props;
+    this.props.products.forEach((product, index) => {
+      if (product.dirty) {
         saveProduct(
           'api.twitch.tv',
-          this.props.clientId,
-          this.props.token,
-          p,
-          this._handleSaveProductSuccess.bind(this, i),
-          this._handleSaveProductError.bind(this, i)
+          clientId,
+          token,
+          product,
+          index,
+          saveProductsSuccess,
+          saveProductsFailure,
         );
       }
-      return p;
-    });
-    this.setState({
-      products: products
     });
   }
 
@@ -96,10 +93,10 @@ export class ProductTableComponent extends Component {
 
     return (
       <div className="product-table">
-        {this.state.error &&
+        {this.props.error &&
           <div className="product-table__error">
             <h4>Error getting products.</h4>
-            <p>{this.state.error}</p>
+            <p>{this.props.error}</p>
           </div>
         }
         {liveProducts.length > 0 &&
@@ -150,71 +147,5 @@ export class ProductTableComponent extends Component {
         </div>
       </div>
     );
-  }
-
-  _updateProduct(index, partial) {
-    this.setState(prevState => {
-      const products = prevState.products.map((product, idx) => {
-        if (idx === index) {
-          let newProduct = {
-            ...product,
-            ...partial
-          };
-          newProduct.validationErrors = this._validateProduct(newProduct);
-          return newProduct;
-        }
-        return product;
-     });
-     return { products: products };
-    });
-  }
-
-  _validateProduct(product) {
-    let validationErrors = {};
-
-    if (!product.displayName) {
-      validationErrors.displayName = ProductErrors.NAME_EMPTY;
-    } else if (product.displayName.length > 255) {
-      validationErrors.displayName = ProductErrors.NAME_CHAR_LIMIT;
-    }
-
-    if (!product.sku) {
-      validationErrors.sku = ProductErrors.SKU_EMPTY;
-    } else if (product.sku.search(/^\S*$/)) {
-      validationErrors.sku = ProductErrors.SKU_WHITESPACE;
-    } else if (product.sku.length > 255) {
-      validationErrors.sku = ProductErrors.SKU_CHAR_LIMIT;
-    }
-
-    if (!product.amount) {
-      validationErrors.amount = ProductErrors.AMOUNT_EMPTY;
-    } else if (product.amount < 1 || product.amount > 10000) {
-      validationErrors.amount = ProductErrors.AMOUNT_OUT_OF_RANGE;
-    }
-
-    return validationErrors;
-  }
-
-  _handleFetchProductsSuccess(products) {
-    this.setState({ products: products });
-  }
-
-  _handleFetchProductsError(error) {
-    this.setState({ error: error });
-  }
-
-  _handleSaveProductSuccess(index) {
-    const partial = {
-      savedInCatalog: true,
-      dirty: false
-    };
-    this._updateProduct(index, partial);
-  }
-
-  _handleSaveProductError(index, error) {
-    const partial = {
-      error: error
-    };
-    this._updateProduct(index, partial);
   }
 }

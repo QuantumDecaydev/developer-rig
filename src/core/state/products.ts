@@ -1,27 +1,59 @@
 import { Product, ValidationErrors } from '../models/product';
 import { GlobalState } from '../models/global-state';
-import * as productActions from '../actions/products';
+import * as ProductActions from '../actions/products';
 import * as ProductErrors from '../../constants/product-errors';
 
 export interface ProductState {
   products: Product[];
+  error: string;
 }
 
 export const getInitialState = (): ProductState => ({
   products: [],
+  error: '',
 });
 
-export function productsReducer(state = getInitialState(), action: productActions.All): ProductState {
+export function productsReducer(state = getInitialState(), action: ProductActions.All): ProductState {
+  let products: Product[] = state.products;
+
   switch (action.type) {
-    case productActions.LOAD_PRODUCTS:
+    case ProductActions.LOAD_PRODUCTS_SUCCESS:
       return {
         ...state,
         products: action.products,
       };
 
-    case productActions.ADD_PRODUCT:
-      const products_ADD = [...state['products']];
-      products_ADD.push({
+    case ProductActions.LOAD_PRODUCTS_FAILURE:
+      return {
+        ...state,
+        error: action.error,
+      }
+
+    case ProductActions.SAVE_PRODUCT_SUCCESS:
+      products = updateProduct(
+        state,
+        action.index,
+        { savedInCatalog: true, dirty: false }
+      );
+      return {
+        ...state,
+        products: products
+      };
+
+    case ProductActions.SAVE_PRODUCT_FAILURE:
+      products = updateProduct(
+        state,
+        action.index,
+        { error: action.error }
+      );
+      return {
+        ...state,
+        products: products
+      };
+
+    case ProductActions.ADD_PRODUCT:
+      products = [...state['products']];
+      products.push({
         displayName: 'New Product',
         sku: 'newSKU',
         amount: 1,
@@ -32,18 +64,18 @@ export function productsReducer(state = getInitialState(), action: productAction
       });
       return {
         ...state,
-        products: products_ADD
+        products: products
       };
 
-    case productActions.CHANGE_PRODUCT:
-      const products_CHANGE = updateProduct(
+    case ProductActions.CHANGE_PRODUCT:
+      products = updateProduct(
         state,
         action.index,
-        { [action.fieldName]: action.value }
+        { [action.fieldName]: action.value, dirty: true }
       );
       return {
         ...state,
-        products: products_CHANGE
+        products: products
       };
       
     default:
@@ -53,6 +85,10 @@ export function productsReducer(state = getInitialState(), action: productAction
 
 export function getProducts(state: GlobalState) {
   return state.products && state.products.products;
+}
+
+export function getError(state: GlobalState) {
+  return state.products && state.products.error;
 }
 
 function updateProduct(state: ProductState, index: number, partial: object): Product[] {
