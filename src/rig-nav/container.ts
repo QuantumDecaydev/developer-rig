@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { connect } from 'react-redux';
 import { GlobalState } from '../core/models/global-state';
 import { getUserSession } from '../core/state/session';

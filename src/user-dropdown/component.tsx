@@ -7,12 +7,16 @@ export interface PublicProps {
   session: UserSession;
 }
 
+export interface ReduxDispatchProps {
+  logout: () => void;
+}
+
 interface State {
   open?: boolean;
 }
 
-type Props = PublicProps;
-export class UserDropdown extends React.Component<Props, State>{
+type Props = PublicProps & ReduxDispatchProps;
+export class UserDropdownComponent extends React.Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -21,6 +25,7 @@ export class UserDropdown extends React.Component<Props, State>{
   }
   private signOut() {
     localStorage.removeItem('rigLogin');
+    this.props.logout();
   }
   private toggleDropdown() {
     this.setState({
@@ -32,16 +37,21 @@ export class UserDropdown extends React.Component<Props, State>{
       return null;
     }
     const { login, profileImageUrl } = this.props.session;
+    const usernameClasses = classNames({
+      'user-dropdown__username': true,
+      'open': this.state.open,
+    });
     const dropdownClass = classNames({
       'user-dropdown__menu': true,
       'transition': true,
       'open': this.state.open,
     });
+
     return (
       <div onClick={() => { this.toggleDropdown(); }} className='user-dropdown'>
         <div className='user-dropdown__name-container'>
           <img alt={login} className='user-dropdown__image' src={profileImageUrl} />
-          <div className='user-dropdown__username'>{login}</div>
+          <div className={usernameClasses}>{login}</div>
         </div>
         <div className={dropdownClass}>
           <ul>

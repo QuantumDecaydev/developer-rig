@@ -290,6 +290,7 @@ export class Rig extends Component {
         }
         store.dispatch(userLogin(userSess));
         localStorage.setItem('rigLogin', JSON.stringify(userSess));
+        window.location = '/';
       }, err => {
         this.setState({
           error: err,

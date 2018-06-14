@@ -19,6 +19,12 @@ export function sessionReducer(state = getInitialState(), action: sessionActions
         sessionReceived: true,
         userSession: action.userSession,
       };
+    case sessionActions.USER_LOGOUT:
+      return {
+        ...state,
+        sessionReceived: false,
+        userSession: null,
+      };
     default:
       return state;
   }
