@@ -60,7 +60,8 @@ export function productsReducer(state = getInitialState(), action: ProductAction
         inDevelopment: 'true',
         broadcast: 'true',
         deprecated: false,
-        dirty: true
+        dirty: true,
+        savedInCatalog: false,
       });
       return {
         ...state,

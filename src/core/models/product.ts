@@ -6,6 +6,7 @@ export interface Product {
   broadcast: string;
   deprecated: boolean;
   dirty: boolean;
+  savedInCatalog: boolean;
   validationErrors?: ValidationErrors;
 }
 
