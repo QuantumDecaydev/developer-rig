@@ -56,10 +56,10 @@ export class UserDropdownComponent extends React.Component<Props, State>{
         <div className={dropdownClass}>
           <ul>
             <li>
-              <a href="https://dev.twitch.tv/dashboard/extensions">Extensions Dashboard</a>
+              <a target='_blank' href="https://dev.twitch.tv/dashboard/extensions">Extensions Dashboard</a>
             </li>
             <li>
-              <a href="https://dev.twitch.tv/docs/extensions/">Documentation</a>
+              <a target='_blank' href="https://dev.twitch.tv/docs/extensions/">Documentation</a>
             </li>
             <li onClick={() => { this.signOut() }}>Sign Out</li>
           </ul>
